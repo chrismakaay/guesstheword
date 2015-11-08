@@ -7,10 +7,19 @@ define([
             points    : 0,
             isMatched : false
         },
-        setWord : function(text) {
+        initialize : function() {
             this.set({
-                word : text
+                points : this.getUniqueCharNumber(this.get('word'))
             });
+        },
+        getUniqueCharNumber : function(text) {
+            var letters = '';
+            for (var i=0; i < text.length; i++) {
+                if (letters.indexOf(text[i]) === -1) {
+                    letters += text[i];
+                }
+            }
+            return letters.length;
         }
     });
 });
