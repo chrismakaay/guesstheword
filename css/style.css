@@ -1,3 +1,7 @@
+body {
+    text-align: center;
+}
+.alert,
 section {
     display: none;
 }

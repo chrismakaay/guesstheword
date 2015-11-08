@@ -22,14 +22,18 @@ define([
             return this;
         },
 
-
-
+        /**
+         * Adds the words to the model collection, if it not contains them
+         *
+         * @method  updateWordCollection
+         * @returns {void}
+         */
         updateWordCollection : function() {
             this.Words = new WordCollection();
             this.Words.fetch();
 
             for (var i=0; i < wordArray.length; i++) {
-                if (!this.isWordSaved(wordArray[i])) {
+                if (!this.getModelByWord(wordArray[i])) {
                     var model = new WordModel({
                         word: wordArray[i]
                     });
@@ -37,22 +41,21 @@ define([
                     model.save();
                 }
             }
-            console.log(this.Words);
         },
 
         /**
-         * Returns TRUE, if there is a model in the collection which
+         * Returns a model from the collection which
          * has the given word in his word attribute
          *
-         * @method isWordSaved
+         * @method  getModelByWord
          * @param   {string} word
          * @returns {boolean}
          */
-        isWordSaved : function(word) {
-            var isSaved = this.Words.find(function(item) {
+        getModelByWord : function(word) {
+            var model = this.Words.find(function(item) {
                 return item.get('word') === word;
             });
-            return isSaved;
+            return model;
         },
 
         onNavButtonClick : function(ev) {
@@ -68,11 +71,23 @@ define([
         onCheckButtonClick : function(ev) {
             ev.preventDefault();
 
-            var typedWord = this.$el.find('input').val();
+            var typedWord = this.$el.find('input').val(),
+                wordModel = this.getModelByWord(typedWord);
 
-            if (this.isWordSaved(typedWord)) {
-                console.log('ahaaa');
+            if (wordModel) {
+                this.showSuccessMessage(wordModel.get('points'));
             }
+            else {
+                this.showErrorMessage();
+            }
+        },
+
+        showSuccessMessage : function() {
+            this.$el.find('.alert-success').show();
+        },
+
+        showErrorMessage : function() {
+            this.$el.find('.alert-success').show();
         },
 
         setActiveButton : function() {
