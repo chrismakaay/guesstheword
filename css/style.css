@@ -1,7 +1,58 @@
 body {
+    color: #4a6b8a;
+    background: #728ca6;
     text-align: center;
+}
+h1 {
+    font-size: 35px;
+    line-height: 40px;
+    text-transform: uppercase;
+}
+h1 span {
+    display: inline-block;
+    margin: -4px 5px 0 0;
+    font-size: 20px;
+    letter-spacing: 5px;
+    vertical-align: top;
+}
+h1 strong {
+    display: block;
+    font-size: 50px;
+    line-height: 40px;
+}
+nav {
+    padding: 0 0 20px;
+}
+ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px dotted #000
+}
+ul li {
+    position: relative;
+    height: 40px;
+    padding: 0 20px;
+    font: 15px/40px Arial;
+    text-align: left;
+    border-bottom: 1px dotted #000
+}
+ul li span {
+    display: block;
+    height: 40px;
+    position: absolute;
+    right: 20px;
+    top: 0;
+    font-weight: bold;
 }
 .alert,
 section {
     display: none;
+    padding: 20px 0;
+}
+.form-control {
+    margin: 0 0 10px;
+}
+.alert {
+    margin: 10px 0;
 }

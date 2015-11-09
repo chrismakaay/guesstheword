@@ -14,8 +14,17 @@ define([
             'click button' : 'onCheckButtonClick'
         },
 
+        /**
+         * Default init method which is called when the view is first created
+         *
+         * @method  initialize
+         * @returns {exports.initialize}
+         */
         initialize : function() {
+            this.$scoresList = $('#scores').find('ul');
+
             this.updateWordCollection();
+            this.updateScoreList();
             this.showSection('#play');
 
             return this;
@@ -43,18 +52,34 @@ define([
         },
 
         /**
+         *
+         */
+        updateScoreList : function() {
+            var self = this;
+
+            this.$scoresList.html('');
+
+            this.Words.each(function(item){
+                if (item.get('isMatched')) {
+                    self.$scoresList.append(
+                        '<li>' + item.get('word') + '<span>' + item.get('points') + '</span></li>'
+                    );
+                }
+            });
+        },
+
+        /**
          * Returns a model from the collection which
          * has the given word in his word attribute
          *
          * @method  getModelByWord
          * @param   {string} word
-         * @returns {boolean}
+         * @returns {Backbone.Model}
          */
         getModelByWord : function(word) {
-            var model = this.Words.find(function(item) {
+            return this.Words.find(function(item) {
                 return item.get('word') === word;
             });
-            return model;
         },
 
         /**
@@ -81,30 +106,55 @@ define([
             $(sectionSel).show();
         },
 
+        /**
+         * Handler of the check button click event
+         *
+         * @method  onCheckButtonClick
+         * @param   {object} ev    The event object
+         * @returns {void}
+         */
         onCheckButtonClick : function(ev) {
             ev.preventDefault();
 
             var typedWord = this.$el.find('input').val(),
                 wordModel = this.getModelByWord(typedWord);
 
-            if (wordModel) {
+            if (wordModel && !wordModel.get('isMatched')) {
+                wordModel.set('isMatched', true);
+                wordModel.save();
                 this.showSuccessMessage(wordModel.get('points'));
+                this.updateScoreList();
             }
             else {
                 this.showErrorMessage();
             }
         },
 
+        /**
+         * Shows the success message and hides any other alert message
+         *
+         * @method  showSuccessMessage
+         * @param   {number} points    The score points
+         * @returns {void}
+         */
         showSuccessMessage : function(points) {
             var messageContainer = this.$el.find('.alert-success'),
                 pointsContainer  = messageContainer.find('p span');
 
+            this.$el.find('.alert').hide();
             pointsContainer.html(points);
             messageContainer.show();
         },
 
+        /**
+         * Shows the error message and hides any other alert message
+         *
+         * @method  showErrorMessage
+         * @returns {void}
+         */
         showErrorMessage : function() {
-            this.$el.find('.alert-error').show();
+            this.$el.find('.alert').hide();
+            this.$el.find('.alert-danger').show();
         }
     });
 });
