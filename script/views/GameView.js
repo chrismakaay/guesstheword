@@ -17,7 +17,6 @@ define([
         initialize : function() {
             this.updateWordCollection();
             this.showSection('#play');
-            this.setActiveButton();
 
             return this;
         },
@@ -58,11 +57,25 @@ define([
             return model;
         },
 
+        /**
+         * Handler of the navigation buttons click event
+         *
+         * @method  onNavButtonClick
+         * @param   {object} ev    The event object
+         * @returns {void}
+         */
         onNavButtonClick : function(ev) {
             ev.preventDefault();
             this.showSection(ev.target.hash);
         },
 
+        /**
+         * Shows a selected section block and hides the others
+         *
+         * @method showSection
+         * @param   {string} sectionSel    The CSS selector of the section block
+         * @returns {void}
+         */
         showSection : function(sectionSel) {
             this.$el.find('section').hide();
             $(sectionSel).show();
@@ -82,19 +95,16 @@ define([
             }
         },
 
-        showSuccessMessage : function() {
-            this.$el.find('.alert-success').show();
+        showSuccessMessage : function(points) {
+            var messageContainer = this.$el.find('.alert-success'),
+                pointsContainer  = messageContainer.find('p span');
+
+            pointsContainer.html(points);
+            messageContainer.show();
         },
 
         showErrorMessage : function() {
-            this.$el.find('.alert-success').show();
-        },
-
-        setActiveButton : function() {
-            $('nav a').removeClass('disabled');
-            $('nav a:first').addClass('disabled');
-        },
-
-
+            this.$el.find('.alert-error').show();
+        }
     });
 });
